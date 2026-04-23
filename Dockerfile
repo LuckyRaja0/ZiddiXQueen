@@ -1,15 +1,15 @@
-FROM python:3.10.4
-RUN apt update && apt upgrade -y
-RUN apt install python3-pip -y
-RUN apt install ffmpeg -y
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
-RUN apt-get install -y nodejs
-RUN npm i -g npm
-RUN mkdir /app/
-COPY . /app
+FROM python:3.12-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ffmpeg \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
-RUN pip3 install --upgrade pip
-RUN pip3 install -U -r requirements.txt
-CMD python3 -m ZIDDIX.py
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
 
+COPY . .
 
+CMD ["python3", "ZIDDIX.py"]

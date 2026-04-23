@@ -1,289 +1,297 @@
-from pyrogram import Client, filters
 import asyncio
-from pyrogram.types import *
-from pymongo import MongoClient
-import requests
-import random
-from pyrogram.errors import (
-    PeerIdInvalid,
-    ChatWriteForbidden
-)
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
-from pyrogram.errors import ChatAdminRequired, UserNotParticipant, ChatWriteForbidden
 import os
-import re
+import random
+
+from pymongo import MongoClient
+from pyrogram import Client, filters
+from pyrogram.enums import ChatAction
+from pyrogram.errors import (
+    ChatAdminRequired,
+    ChatWriteForbidden,
+    PeerIdInvalid,
+    UserNotParticipant,
+)
+from pyrogram.types import (
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    Message,
+)
 
 
-API_ID = os.environ.get("API_ID", "14607455") 
-API_HASH = os.environ.get("API_HASH", "18693e1460d9356d93e32e8c343e9543") 
+API_ID = int(os.environ.get("API_ID", "0"))
+API_HASH = os.environ.get("API_HASH", "")
 SESSION_NAME = os.environ.get("SESSION_NAME", "")
-MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://its_star_boi:7234049299@cluster0.8twjh9e.mongodb.net/?retryWrites=true&w=majority") 
+MONGO_URL = os.environ.get("MONGO_URL", "")
 
 
-client = Client(SESSION_NAME, API_ID, API_HASH)
+if not all([API_ID, API_HASH, SESSION_NAME, MONGO_URL]):
+    raise SystemExit(
+        "Missing required environment variables: API_ID, API_HASH, "
+        "SESSION_NAME, MONGO_URL"
+    )
+
+
+client = Client(
+    name="ziddixqueen",
+    api_id=API_ID,
+    api_hash=API_HASH,
+    session_string=SESSION_NAME,
+    in_memory=True,
+)
+
+
+mongo_client = MongoClient(MONGO_URL)
+chatai = mongo_client["Word"]["WordDb"]
+ziddi = mongo_client["ziddiDb"]["ziddi"]
 
 
 @client.on_message(
-    filters.command("repo", prefixes=["/", ".", "?", "-"])
-    & ~filters.private)
+    filters.command("repo", prefixes=["/", ".", "?", "-"]) & ~filters.private
+)
 async def chatbot(client, message):
     await message.delete()
-    ziddiai = await message.reply("🤭🤏✌️")
+    ziddiai_msg = await message.reply("🤭🤏✌️")
     await asyncio.sleep(1)
-    await ziddiai.edit("**ʙᴏʜᴀᴛ ᴛᴀɪᴊ ʜᴏ ʀᴇᴘᴏ ᴄʜᴀʜɪʏᴇ**")
+    await ziddiai_msg.edit("**ʙᴏʜᴀᴛ ᴛᴀɪᴊ ʜᴏ ʀᴇᴘᴏ ᴄʜᴀʜɪʏᴇ**")
     await asyncio.sleep(1)
-    await ziddiai.edit("**ɪ group se jake lelo 💕**")
+    await ziddiai_msg.edit("**ɪ group se jake lelo 💕**")
     await asyncio.sleep(1)
-    await ziddiai.edit("[GO FAST TO GET REPO](https://t.me/+g0YcEKl54yU0ZTU9)")
+    await ziddiai_msg.edit(
+        "[GO FAST TO GET REPO](https://t.me/+g0YcEKl54yU0ZTU9)"
+    )
     await asyncio.sleep(2)
-    umm = await message.reply_sticker("CAACAgIAAxkBAAEForNjAykaq_efq4Wd-9KZv-nNxJRn3AACIgMAAm2wQgO8x8PfoXC1eCkE")
+    await message.reply_sticker(
+        "CAACAgIAAxkBAAEForNjAykaq_efq4Wd-9KZv-nNxJRn3AACIgMAAm2wQgO8x8PfoXC1eCkE"
+    )
     await asyncio.sleep(2)
     await message.reply_photo(
-        photo=f"http://telegra.ph/file/8f4e86e223b3051307dce.jpg",
-        caption=f"""━━━━━━━━━━━━━━━━━━━━━━━━
-💥 A ᴘᴏᴡᴇʀғᴜʟ ᴀɪ ʙᴏᴛ
-ᴏғ ♻️ 𝐓𝐈𝐌𝐄 𝐏𝐀𝐒𝐒 🏷️ 🔥
-━━━━━━━━━━━━━━━━━
-ᴅᴀᴛᴀʙᴀsᴇ ʙᴀᴄᴋᴇɴᴅ ʙᴏᴛ ғᴏʀ ᴛɢ...
-┏━━━━━━━━━━━━━━━━━┓
-┣★ ᴄʀᴇᴀᴛᴇʀ [𝐓𝐈𝐌𝐄 𝐏𝐀𝐒𝐒 🏷️](https://t.me/time_pass_back)
-┣★ ʙᴏᴛ ᴜᴏᴅᴀᴛᴇs [ᴏᴜʀ ᴏᴛʜᴇʀ ʙᴏᴛs](https://t.me/ziddixbot)
-┣★ sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ [ᴄʜᴀᴛ](https://t.me/+pc-wb-d-ZTliNzNl)
-┗━━━━━━━━━━━━━━━━━┛
-💞 
-IF HAVE ANY QUESTION THEN CONTACT » TO » MY » [OWNER] @TIME_PASS_BACK""",
-        reply_markup=InlineKeyboardMarkup(
-            [[InlineKeyboardButton("🌼 sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ 💮", url=f"https://t.me/+pc-wb-d-ZTliNzNl")]]
+        photo="http://telegra.ph/file/8f4e86e223b3051307dce.jpg",
+        caption=(
+            "━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            "💥 A ᴘᴏᴡᴇʀғᴜʟ ᴀɪ ʙᴏᴛ\n"
+            "ᴏғ ♻️ 𝐓𝐈𝐌𝐄 𝐏𝐀𝐒𝐒 🏷️ 🔥\n"
+            "━━━━━━━━━━━━━━━━━\n"
+            "ᴅᴀᴛᴀʙᴀsᴇ ʙᴀᴄᴋᴇɴᴅ ʙᴏᴛ ғᴏʀ ᴛɢ...\n"
+            "┏━━━━━━━━━━━━━━━━━┓\n"
+            "┣★ ᴄʀᴇᴀᴛᴇʀ [𝐓𝐈𝐌𝐄 𝐏𝐀𝐒𝐒 🏷️](https://t.me/time_pass_back)\n"
+            "┣★ ʙᴏᴛ ᴜᴏᴅᴀᴛᴇs [ᴏᴜʀ ᴏᴛʜᴇʀ ʙᴏᴛs](https://t.me/ziddixbot)\n"
+            "┣★ sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ [ᴄʜᴀᴛ](https://t.me/+pc-wb-d-ZTliNzNl)\n"
+            "┗━━━━━━━━━━━━━━━━━┛\n"
+            "💞 \n"
+            "IF HAVE ANY QUESTION THEN CONTACT » TO » MY » [OWNER] "
+            "@TIME_PASS_BACK"
         ),
-    ) 
-
-
-@client.on_message(
-    filters.command("alive", prefixes=["/", ".", "?", "-"])
-    & ~filters.private)
-async def start(client, message):
-    await message.reply_text(f"**Ziddi x Queen is alive**")
-    
-    
-@client.on_message(
- (
-        filters.text
-        | filters.sticker
+        reply_markup=InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton(
+                        "🌼 sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ 💮",
+                        url="https://t.me/+pc-wb-d-ZTliNzNl",
+                    )
+                ]
+            ]
+        ),
     )
-    & ~filters.private
-    & ~filters.me
-    & ~filters.bot,
+
+
+@client.on_message(
+    filters.command("alive", prefixes=["/", ".", "?", "-"]) & ~filters.private
+)
+async def start(client, message):
+    await message.reply_text("**Ziddi x Queen is alive**")
+
+
+async def _pick_reply(word):
+    """Return (text, kind) tuple for a reply, or (None, None) if none found."""
+    cursor = chatai.find({"word": word})
+    candidates = [doc["text"] for doc in cursor]
+    if not candidates:
+        return None, None
+    hey = random.choice(candidates)
+    is_text = chatai.find_one({"text": hey})
+    kind = is_text.get("check") if is_text else None
+    return hey, kind
+
+
+async def _send_reply(message, hey, kind, prefer_sticker):
+    """Send the reply as sticker or text depending on stored kind.
+
+    `prefer_sticker=True` means: if kind is not "text", send as sticker
+    (used when the trigger was a sticker).
+    `prefer_sticker=False` means: if kind is not "sticker", send as text
+    (used when the trigger was text).
+    """
+    if prefer_sticker:
+        if kind == "text":
+            await message.reply_text(hey)
+        else:
+            await message.reply_sticker(hey)
+    else:
+        if kind == "sticker":
+            await message.reply_sticker(hey)
+        else:
+            await message.reply_text(hey)
+
+
+@client.on_message(
+    filters.text & ~filters.private & ~filters.me & ~filters.bot
 )
 async def ziddiai(client: Client, message: Message):
+    is_ziddi = ziddi.find_one({"chat_id": message.chat.id})
 
-   chatdb = MongoClient(MONGO_URL)
-   chatai = chatdb["Word"]["WordDb"]   
+    if not message.reply_to_message:
+        if is_ziddi:
+            return
+        hey, kind = await _pick_reply(message.text)
+        if hey is None:
+            return
+        await client.send_chat_action(message.chat.id, ChatAction.TYPING)
+        await _send_reply(message, hey, kind, prefer_sticker=False)
+        return
 
-   if not message.reply_to_message:
-       ziddidb = MongoClient(MONGO_URL)
-       ziddi = ziddidb["ziddiDb"]["ziddi"] 
-       is_ziddi = ziddi.find_one({"chat_id": message.chat.id})
-       if not is_ziddi:
-           await client.send_chat_action(message.chat.id, "typing")
-           K = []  
-           is_chat = chatai.find({"word": message.text})  
-           k = chatai.find_one({"word": message.text})      
-           if k:               
-               for x in is_chat:
-                   K.append(x['text'])          
-               hey = random.choice(K)
-               is_text = chatai.find_one({"text": hey})
-               Yo = is_text['check']
-               if Yo == "sticker":
-                   await message.reply_sticker(f"{hey}")
-               if not Yo == "sticker":
-                   await message.reply_text(f"{hey}")
-   
-   if message.reply_to_message:  
-       ziddidb = MongoClient(MONGO_URL)
-       ziddi = ziddidb["ziddiDb"]["ziddi"] 
-       is_ziddi = ziddi.find_one({"chat_id": message.chat.id})    
-       getme = await client.get_me()
-       user_id = getme.id                             
-       if message.reply_to_message.from_user.id == user_id: 
-           if not is_ziddi:                   
-               await client.send_chat_action(message.chat.id, "typing")
-               K = []  
-               is_chat = chatai.find({"word": message.text})
-               k = chatai.find_one({"word": message.text})      
-               if k:       
-                   for x in is_chat:
-                       K.append(x['text'])
-                   hey = random.choice(K)
-                   is_text = chatai.find_one({"text": hey})
-                   Yo = is_text['check']
-                   if Yo == "sticker":
-                       await message.reply_sticker(f"{hey}")
-                   if not Yo == "sticker":
-                       await message.reply_text(f"{hey}")
-       if not message.reply_to_message.from_user.id == user_id:          
-           if message.sticker:
-               is_chat = chatai.find_one({"word": message.reply_to_message.text, "id": message.sticker.file_unique_id})
-               if not is_chat:
-                   chatai.insert_one({"word": message.reply_to_message.text, "text": message.sticker.file_id, "check": "sticker", "id": message.sticker.file_unique_id})
-           if message.text:                 
-               is_chat = chatai.find_one({"word": message.reply_to_message.text, "text": message.text})                 
-               if not is_chat:
-                   chatai.insert_one({"word": message.reply_to_message.text, "text": message.text, "check": "none"})                                                                                                                                               
+    me = await client.get_me()
+    user_id = me.id
+    if message.reply_to_message.from_user and (
+        message.reply_to_message.from_user.id == user_id
+    ):
+        if is_ziddi:
+            return
+        hey, kind = await _pick_reply(message.text)
+        if hey is None:
+            return
+        await client.send_chat_action(message.chat.id, ChatAction.TYPING)
+        await _send_reply(message, hey, kind, prefer_sticker=False)
+        return
+
+    # Learn: someone replied with text to another user's message
+    reply = message.reply_to_message
+    if reply.text:
+        exists = chatai.find_one(
+            {"word": reply.text, "text": message.text}
+        )
+        if not exists:
+            chatai.insert_one(
+                {"word": reply.text, "text": message.text, "check": "none"}
+            )
+    elif reply.sticker:
+        exists = chatai.find_one(
+            {
+                "word": reply.sticker.file_unique_id,
+                "text": message.text,
+            }
+        )
+        if not exists:
+            chatai.insert_one(
+                {
+                    "word": reply.sticker.file_unique_id,
+                    "text": message.text,
+                    "check": "text",
+                }
+            )
+
 
 @client.on_message(
- (
-        filters.sticker
-        | filters.text
-    )
-    & ~filters.private
-    & ~filters.me
-    & ~filters.bot,
+    filters.sticker & ~filters.private & ~filters.me & ~filters.bot
 )
 async def ziddistickerai(client: Client, message: Message):
+    is_ziddi = ziddi.find_one({"chat_id": message.chat.id})
 
-   chatdb = MongoClient(MONGO_URL)
-   chatai = chatdb["Word"]["WordDb"]   
+    if not message.reply_to_message:
+        if is_ziddi:
+            return
+        hey, kind = await _pick_reply(message.sticker.file_unique_id)
+        if hey is None:
+            return
+        await client.send_chat_action(message.chat.id, ChatAction.TYPING)
+        await _send_reply(message, hey, kind, prefer_sticker=True)
+        return
 
-   if not message.reply_to_message:
-       ziddidb = MongoClient(MONGO_URL)
-       ziddi = ziddidb["ziddiDb"]["ziddi"] 
-       is_ziddi = ziddi.find_one({"chat_id": message.chat.id})
-       if not is_ziddi:
-           await client.send_chat_action(message.chat.id, "typing")
-           K = []  
-           is_chat = chatai.find({"word": message.sticker.file_unique_id})      
-           k = chatai.find_one({"word": message.text})      
-           if k:           
-               for x in is_chat:
-                   K.append(x['text'])
-               hey = random.choice(K)
-               is_text = chatai.find_one({"text": hey})
-               Yo = is_text['check']
-               if Yo == "text":
-                   await message.reply_text(f"{hey}")
-               if not Yo == "text":
-                   await message.reply_sticker(f"{hey}")
-   
-   if message.reply_to_message:
-       ziddidb = MongoClient(MONGO_URL)
-       ziddi = ziddidb["ziddiDb"]["ziddi"] 
-       is_ziddi = ziddi.find_one({"chat_id": message.chat.id})
-       getme = await client.get_me()
-       user_id = getme.id
-       if message.reply_to_message.from_user.id == user_id: 
-           if not is_ziddi:                    
-               await client.send_chat_action(message.chat.id, "typing")
-               K = []  
-               is_chat = chatai.find({"word": message.text})
-               k = chatai.find_one({"word": message.text})      
-               if k:           
-                   for x in is_chat:
-                       K.append(x['text'])
-                   hey = random.choice(K)
-                   is_text = chatai.find_one({"text": hey})
-                   Yo = is_text['check']
-                   if Yo == "text":
-                       await message.reply_text(f"{hey}")
-                   if not Yo == "text":
-                       await message.reply_sticker(f"{hey}")
-       if not message.reply_to_message.from_user.id == user_id:          
-           if message.text:
-               is_chat = chatai.find_one({"word": message.reply_to_message.sticker.file_unique_id, "text": message.text})
-               if not is_chat:
-                   toggle.insert_one({"word": message.reply_to_message.sticker.file_unique_id, "text": message.text, "check": "text"})
-           if message.sticker:                 
-               is_chat = chatai.find_one({"word": message.reply_to_message.sticker.file_unique_id, "text": message.sticker.file_id})                 
-               if not is_chat:
-                   chatai.insert_one({"word": message.reply_to_message.sticker.file_unique_id, "text": message.sticker.file_id, "check": "none"})    
-              
+    me = await client.get_me()
+    user_id = me.id
+    if message.reply_to_message.from_user and (
+        message.reply_to_message.from_user.id == user_id
+    ):
+        if is_ziddi:
+            return
+        hey, kind = await _pick_reply(message.sticker.file_unique_id)
+        if hey is None:
+            return
+        await client.send_chat_action(message.chat.id, ChatAction.TYPING)
+        await _send_reply(message, hey, kind, prefer_sticker=True)
+        return
+
+    # Learn: someone replied with a sticker
+    reply = message.reply_to_message
+    if reply.text:
+        exists = chatai.find_one(
+            {
+                "word": reply.text,
+                "id": message.sticker.file_unique_id,
+            }
+        )
+        if not exists:
+            chatai.insert_one(
+                {
+                    "word": reply.text,
+                    "text": message.sticker.file_id,
+                    "check": "sticker",
+                    "id": message.sticker.file_unique_id,
+                }
+            )
+    elif reply.sticker:
+        exists = chatai.find_one(
+            {
+                "word": reply.sticker.file_unique_id,
+                "text": message.sticker.file_id,
+            }
+        )
+        if not exists:
+            chatai.insert_one(
+                {
+                    "word": reply.sticker.file_unique_id,
+                    "text": message.sticker.file_id,
+                    "check": "none",
+                }
+            )
 
 
 @client.on_message(
-    (
-        filters.text
-        | filters.sticker
-    )
-    & filters.private
-    & ~filters.me
-    & ~filters.bot,
+    filters.text & filters.private & ~filters.me & ~filters.bot
 )
 async def ziddiprivate(client: Client, message: Message):
+    if message.reply_to_message:
+        me = await client.get_me()
+        if not (
+            message.reply_to_message.from_user
+            and message.reply_to_message.from_user.id == me.id
+        ):
+            return
 
-   chatdb = MongoClient(MONGO_URL)
-   chatai = chatdb["Word"]["WordDb"]
-   if not message.reply_to_message: 
-       await client.send_chat_action(message.chat.id, "typing")
-       K = []  
-       is_chat = chatai.find({"word": message.text})                 
-       for x in is_chat:
-           K.append(x['text'])
-       hey = random.choice(K)
-       is_text = chatai.find_one({"text": hey})
-       Yo = is_text['check']
-       if Yo == "sticker":
-           await message.reply_sticker(f"{hey}")
-       if not Yo == "sticker":
-           await message.reply_text(f"{hey}")
-   if message.reply_to_message:            
-       getme = await client.get_me()
-       user_id = getme.id       
-       if message.reply_to_message.from_user.id == user_id:                    
-           await client.send_chat_action(message.chat.id, "typing")
-           K = []  
-           is_chat = chatai.find({"word": message.text})                 
-           for x in is_chat:
-               K.append(x['text'])
-           hey = random.choice(K)
-           is_text = chatai.find_one({"text": hey})
-           Yo = is_text['check']
-           if Yo == "sticker":
-               await message.reply_sticker(f"{hey}")
-           if not Yo == "sticker":
-               await message.reply_text(f"{hey}")
-                     
+    hey, kind = await _pick_reply(message.text)
+    if hey is None:
+        return
+    await client.send_chat_action(message.chat.id, ChatAction.TYPING)
+    await _send_reply(message, hey, kind, prefer_sticker=False)
+
+
 @client.on_message(
- (
-        filters.sticker
-        | filters.text
-    )
-    & filters.private
-    & ~filters.me
-    & ~filters.bot,
+    filters.sticker & filters.private & ~filters.me & ~filters.bot
 )
 async def ziddiprivatesticker(client: Client, message: Message):
+    if message.reply_to_message:
+        me = await client.get_me()
+        if not (
+            message.reply_to_message.from_user
+            and message.reply_to_message.from_user.id == me.id
+        ):
+            return
 
-   chatdb = MongoClient(MONGO_URL)
-   chatai = chatdb["Word"]["WordDb"] 
-   if not message.reply_to_message:
-       await client.send_chat_action(message.chat.id, "typing")
-       K = []  
-       is_chat = chatai.find({"word": message.sticker.file_unique_id})                 
-       for x in is_chat:
-           K.append(x['text'])
-       hey = random.choice(K)
-       is_text = chatai.find_one({"text": hey})
-       Yo = is_text['check']
-       if Yo == "text":
-           await message.reply_text(f"{hey}")
-       if not Yo == "text":
-           await message.reply_sticker(f"{hey}")
-   if message.reply_to_message:            
-       getme = await client.get_me()
-       user_id = getme.id       
-       if message.reply_to_message.from_user.id == user_id:                    
-           await client.send_chat_action(message.chat.id, "typing")
-           K = []  
-           is_chat = chatai.find({"word": message.sticker.file_unique_id})                 
-           for x in is_chat:
-               K.append(x['text'])
-           hey = random.choice(K)
-           is_text = chatai.find_one({"text": hey})
-           Yo = is_text['check']
-           if Yo == "text":
-               await message.reply_text(f"{hey}")
-           if not Yo == "text":
-               await message.reply_sticker(f"{hey}")
-               
+    hey, kind = await _pick_reply(message.sticker.file_unique_id)
+    if hey is None:
+        return
+    await client.send_chat_action(message.chat.id, ChatAction.TYPING)
+    await _send_reply(message, hey, kind, prefer_sticker=True)
 
-client.run()
+
+if __name__ == "__main__":
+    client.run()

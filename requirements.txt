@@ -1,8 +1,6 @@
-flask==2.1.1
-werkzeug==2.0.3
-aiohttp
-pyrogram==1.4.16
-pymongo
-requests
-dnspython
-tgcrypto==1.2.2
+pyrogram==2.0.106
+tgcrypto==1.2.5
+pymongo==4.8.0
+aiohttp==3.9.5
+requests==2.32.3
+dnspython==2.6.1
